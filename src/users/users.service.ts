@@ -104,11 +104,17 @@ export class UsersService {
 
   
       await this.userRepository.update(id, user);
-      const userData: User = await this.userRepository.findOneById(id);
+      const userData = await this.userRepository.findOneById(id);
+      if (!userData) {
+        throw new BadRequestException('User not found');
+      }
       return userData;
    }
    async deleteUser({ id }: { id: number }): Promise<User> {
-    const existUser: User = await this.userRepository.findOneById(id);
+    const existUser = await this.userRepository.findOneById(id);
+    if (!existUser) {
+        throw new BadRequestException('User not found');
+    }
     if (!existUser) throw new BadRequestException('delete your data already!.');
     await this.userRepository.delete(id);
     return existUser;

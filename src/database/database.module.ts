@@ -1,6 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { allowedNodeEnvironmentFlags } from 'process';
 
 @Module({
     imports: [
@@ -22,6 +23,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
               database: configService.get<string>('DB_NAME'),
               autoLoadEntities: true,
               synchronize: true,
+              axtra:{
+                allowPublicKeyRetrieval: true,
+                ssl: false,
+              }
             };
           },
         }),

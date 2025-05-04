@@ -4,7 +4,7 @@ services:
     build: .
     container_name: maload
     ports:
-      - '5000:5000'
+      - '5001:5000'
     restart: always
     env_file: 
       - .env
