@@ -85,7 +85,7 @@ export class UsersService {
         throw new BadRequestException('Parameter is empty!.');
   
       // Clear email from user input
-      if (user.email) delete user.email;
+      if (user.email) user.email ;
   
       // Hash password if user input
       if (user.password) {
@@ -99,8 +99,9 @@ export class UsersService {
       const userDataFromToken = request.user;
   
       const id: number = userDataFromToken.data.id;
-      const existUser: User = await this.userRepository.findOneById(id);
-      if (!existUser) throw new BadRequestException('Not found your data!.');
+      const existUser = await this.userRepository.findOne({ where: { id } });
+      if (!existUser) throw new BadRequestException('User not found');
+
   
       await this.userRepository.update(id, user);
       const userData: User = await this.userRepository.findOneById(id);
@@ -129,7 +130,8 @@ export class UsersService {
   const userData = await this.userRepository.findOneBy({ id: requast.user.data.id });
 
   // clear password field
-  delete userData.password;
+  if (!userData) throw new BadRequestException('User not found!');
+   delete (userData as any).password; 
     return userData;
   }
 
